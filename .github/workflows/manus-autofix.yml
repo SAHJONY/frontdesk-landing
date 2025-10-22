@@ -1,0 +1,93 @@
+name: Manus Autofix — Root Redirect & Hardened CSP
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply fixes (middleware /→/en, headers-only vercel.json, neutral next.config.js, remove root pages)
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          # 1) middleware.ts (single source of truth for redirects)
+          cat > middleware.ts <<'TS'
+          import { NextResponse } from "next/server";
+          import type { NextRequest } from "next/server";
+
+          export function middleware(req: NextRequest) {
+            const url = new URL(req.url);
+
+            // Root → /en
+            if (url.pathname === "/") {
+              url.pathname = "/en";
+              return NextResponse.redirect(url, 308);
+            }
+
+            return NextResponse.next();
+          }
+
+          export const config = { matcher: ["/:path*"] };
+          TS
+
+          # 2) vercel.json (headers only, hardened CSP without unsafe-eval/vercel.live)
+          cat > vercel.json <<'JSON'
+          {
+            "$schema": "https://openapi.vercel.sh/vercel.json",
+            "headers": [
+              {
+                "source": "/(.*)",
+                "headers": [
+                  { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+                  { "key": "Content-Security-Policy", "value": "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; font-src 'self' data:; form-action 'self'" },
+                  { "key": "X-Frame-Options", "value": "DENY" },
+                  { "key": "X-Content-Type-Options", "value": "nosniff" },
+                  { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+                  { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(), camera=()" }
+                ]
+              }
+            ]
+          }
+          JSON
+
+          # 3) next.config.js (neutral; no headers()/redirects() here)
+          cat > next.config.js <<'JS'
+          /** @type {import('next').NextConfig} */
+          const nextConfig = { reactStrictMode: true };
+          module.exports = nextConfig;
+          JS
+
+          # 4) Remove root pages that would block the middleware redirect
+          rm -f app/page.tsx pages/index.tsx || true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "Manus Autofix: root /→/en redirect & hardened CSP (headers-only)"
+          branch: chore/manus-autofix-root-redirect-csp
+          commit-message: "fix: middleware /→/en; headers-only vercel.json (no unsafe-eval); neutral next.config.js; remove root index"
+          body: |
+            This PR makes the setup conflict-free:
+
+            - Redirects handled in `middleware.ts` (root / → /en with 308)
+            - Security headers handled in `vercel.json` (no redirects; hardened CSP without `unsafe-eval` / `vercel.live`)
+            - Neutral `next.config.js` (no async headers/redirects)
+            - Removed root `app/page.tsx` / `pages/index.tsx` so the redirect wins
+
+            After merge, Vercel will auto-deploy. Expect:
+            - `/` → **308** → `/en`
+            - `/en`, `/es`, `/en/pricing`, `/es/pricing` → **200**
+            - 6 security headers present; CSP **without** `unsafe-eval` / `vercel.live`
+            - Webhook unsigned POST → **400/405**
+          labels: automation, security, ci
+          signoff: true
