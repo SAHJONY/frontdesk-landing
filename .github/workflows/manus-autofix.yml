@@ -1,0 +1,14 @@
+git checkout -b chore/replace-workflow
+git rm .github/workflows/old-workflow.yml        # delete old (optional)
+# or edit it instead of removing
+
+# add new workflow
+mkdir -p .github/workflows
+cat > .github/workflows/new-workflow.yml <<'YAML'
+# your new YAML here
+YAML
+
+git add -A
+git commit -m "chore(actions): replace workflow with new version"
+git push -u origin chore/replace-workflow
+# open PR and merge
