@@ -151,7 +151,7 @@ export default function EnLanding() {
             Simple, Transparent Pricing
           </h2>
           <p style={{fontSize: "1.25rem", opacity: 0.9, marginBottom: "3rem"}}>
-            Start free. Scale as you grow.
+            Enterprise-grade AI reception. Scale with confidence.
           </p>
           <div style={{
             display: "grid",
@@ -161,9 +161,9 @@ export default function EnLanding() {
             margin: "0 auto"
           }}>
             {[
-              {name: "Free", price: "$0", features: ["100 minutes/month", "1 inbox", "Basic analytics"]},
-              {name: "Starter", price: "$49", features: ["1,000 minutes/month", "3 inboxes", "Advanced analytics", "CRM integration"]},
-              {name: "Pro", price: "$199", features: ["Unlimited minutes", "Unlimited inboxes", "Premium analytics", "Priority support", "Custom integrations"]}
+              {name: "Starter", price: "$199", features: ["1 inbox", "1 AI receptionist", "Basic analytics", "Email support"]},
+              {name: "Growth", price: "$399", features: ["5 inboxes", "Advanced analytics", "AI Assist+", "CRM integrations", "Priority support"]},
+              {name: "Pro", price: "$699", features: ["Unlimited inboxes", "Full AI orchestration", "Custom branding", "Dedicated support", "SLA guarantee"]}
             ].map((plan, i) => (
               <div key={i} style={{
                 padding: "2.5rem 2rem",
