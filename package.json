@@ -1,6 +1,28 @@
 {
-  "name":"frontdesk-landing","private":true,
-  "scripts":{"dev":"next dev -p 3000","build":"next build","start":"next start -p ${PORT:-3000}","lint":"next lint"},
-  "dependencies":{"@supabase/ssr":"^0.5.2","@supabase/supabase-js":"^2.45.4","next":"14.2.5","react":"18.3.1","react-dom":"18.3.1","stripe":"16.6.0"},
-  "devDependencies":{"@playwright/test":"^1.48.0","typescript":"5.4.5","@types/node":"20.11.30","@types/react":"18.2.66","@types/react-dom":"^18"}
- }
+  "name": "frontdesk-landing",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.45.4",
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "stripe": "16.6.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "20.11.30",
+    "@types/react": "18.2.66",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16",
+    "typescript": "5.4.5"
+  }
+}
