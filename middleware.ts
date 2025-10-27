@@ -1,46 +1,22 @@
-import { NextResponse, type NextRequest } from 'next/server'
+// middleware.ts
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next()
-  const url = request.nextUrl.clone()
+export function middleware(req: NextRequest) {
+  const url = req.nextUrl;
+  const host = req.headers.get('host') || '';
 
-  // Redirect apex domain to www
-  if (url.hostname === 'frontdeskagents.com') {
-    url.hostname = 'www.frontdeskagents.com'
-    return NextResponse.redirect(url, 308)
+  // Only on www root
+  if (host === 'www.frontdeskagents.com' && url.pathname === '/') {
+    const dest = new URL('/en', url);
+    return NextResponse.redirect(dest, { status: 308 });
   }
 
-  // Redirect root to /en
-  if (url.pathname === '/') {
-    url.pathname = '/en'
-    return NextResponse.redirect(url, 308)
-  }
-
-  // Add security headers
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
-  response.headers.set('X-Content-Type-Options', 'nosniff')
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
-  response.headers.set(
-    'Content-Security-Policy',
-    "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; frame-ancestors 'none';"
-  )
-
-  return response
+  // Let everything else pass through
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - healthz (health check)
-     * - api (API routes)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|healthz|api).*)',
-  ],
-}
-
+  // run only on the root path requests
+  matcher: ['/'],
+};
