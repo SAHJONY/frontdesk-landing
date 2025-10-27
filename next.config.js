@@ -1,6 +1,7 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
   async headers() {
     const csp = [
       "default-src 'self'",
@@ -21,7 +22,7 @@ const nextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "geolocation=(), microphone=(), camera=()" },
           { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" } // <-- FIX
+          { key: "X-Frame-Options", value: "DENY" }
         ]
       }
     ];
