@@ -3,20 +3,25 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
-  const url = req.nextUrl;
+  const url = new URL(req.url);
   const host = req.headers.get('host') || '';
 
-  // Only on www root
-  if (host === 'www.frontdeskagents.com' && url.pathname === '/') {
-    const dest = new URL('/en', url);
-    return NextResponse.redirect(dest, { status: 308 });
+  // Apex → www
+  if (host === 'frontdeskagents.com') {
+    url.host = 'www.frontdeskagents.com';
+    return NextResponse.redirect(url, 308);
   }
 
-  // Let everything else pass through
+  // Root → /en
+  if (url.pathname === '/') {
+    url.pathname = '/en';
+    return NextResponse.redirect(url, 308);
+  }
+
   return NextResponse.next();
 }
 
+// Skip Next internals, assets, and files with extensions
 export const config = {
-  // run only on the root path requests
-  matcher: ['/'],
+  matcher: ['/((?!_next|api|static|.*\\..*).*)'],
 };
