@@ -21,7 +21,11 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Skip Next internals, assets, and files with extensions
+// Skip Next internals, assets, and files with extensions.
+// Explicitly exclude /healthz, /robots.txt, and /sitemap.xml for robustness.
 export const config = {
-  matcher: ['/((?!_next|api|static|.*\\..*).*)'],
+  matcher: [
+    // Skip next.js internals, static files, and API routes
+    '/((?!_next|api|static|favicon.ico|robots.txt|sitemap.xml|healthz).*)',
+  ],
 };
