@@ -1,6 +1,4 @@
-// app/healthz/route.ts
 import { NextResponse } from 'next/server';
-export const runtime = 'edge';
 export async function GET() {
-  return NextResponse.json({ ok: true, ts: Date.now(), build: process.env.BUILD_TAG ?? null });
+  return NextResponse.json({ status: "ok", uptime: process.uptime() });
 }
