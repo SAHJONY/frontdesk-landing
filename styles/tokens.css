@@ -1,0 +1,57 @@
+:root {
+  /* Brand — rich indigo/azure with depth */
+  --brand-50: #eef2ff;
+  --brand-100: #e0e7ff;
+  --brand-200: #c7d2fe;
+  --brand-300: #a5b4fc;
+  --brand-400: #818cf8;
+  --brand-500: #6366f1;
+  --brand-600: #4f46e5;
+  --brand-700: #4338ca;
+  --brand-800: #3730a3;
+  --brand-900: #312e81;
+
+  /* Surfaces (dark-first) */
+  --bg: #0b1020; /* app canvas (rich midnight) */
+  --panel: #10162a; /* cards/surfaces */
+  --elev: #121a33; /* higher elevation */
+  --line: rgba(255, 255, 255, 0.08);
+
+  /* Text */
+  --text: #e6eaf2;
+  --muted: #9aa4b2;
+
+  /* Feedback */
+  --ok: #10b981;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+  --info: #38bdf8;
+
+  /* Depth + radii */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --sh-1: 0 10px 30px rgba(2, 6, 23, 0.35);
+  --sh-2: 0 16px 48px rgba(2, 6, 23, 0.5);
+
+  /* Type scale */
+  --font-sans: ui-sans-serif, system-ui, 'Inter', 'SF Pro Text', Segoe UI,
+    Helvetica, Arial;
+  --h1: clamp(2.4rem, 2.6vw + 1.2rem, 3.8rem);
+  --h2: clamp(1.8rem, 1.8vw + 0.9rem, 2.6rem);
+  --h3: clamp(1.3rem, 1.2vw + 0.7rem, 1.6rem);
+}
+
+:root.light {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --elev: #f7fafc;
+  --line: rgba(2, 6, 23, 0.08);
+  --text: #0f172a;
+  --muted: #475569;
+  --sh-1: 0 10px 30px rgba(2, 6, 23, 0.1);
+  --sh-2: 0 16px 48px rgba(2, 6, 23, 0.16);
+}
+

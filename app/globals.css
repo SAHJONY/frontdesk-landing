@@ -1,1 +1,53 @@
-:root { --bg:#0b0f19; --text:#e6ebff; --muted:#9aa4c7; } html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Helvetica,Arial} .container{max-width:1100px;margin:0 auto;padding:40px 24px} .hero{padding:80px 0 24px} .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))} .card{background:#11162a;border:1px solid #202744;border-radius:16px;padding:20px} .btn{display:inline-block;padding:12px 18px;border-radius:12px;background:#2a3cff;color:#fff} .muted{color:var(--muted)}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-bg text-text font-sans antialiased;
+}
+
+a {
+  @apply text-brand-400 hover:text-brand-300 transition;
+}
+
+/* Premium motion (respects reduced motion) */
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in {
+    animation: fade 0.5s ease both;
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0.001;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .hover-lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sh-2);
+  }
+}
+
+/* Accessible focus */
+:where(button, a, [role='button'], input, select, textarea):focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--brand-400), white 20%);
+  outline-offset: 2px;
+}
+
