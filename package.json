@@ -5,7 +5,9 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
-    "lint": "next lint"
+    "lint": "next lint",
+    "guard:style": "node scripts/guard-no-inline-style.js",
+    "prebuild": "npm run guard:style"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
