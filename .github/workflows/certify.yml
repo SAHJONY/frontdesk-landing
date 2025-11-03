@@ -1,0 +1,34 @@
+name: Certify Production
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  BASE_URL: ${{ secrets.HEALTH_BASE_URL }}
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify BASE_URL provided
+        run: |
+          if [ -z "${BASE_URL}" ]; then
+            echo "::error::Missing secret HEALTH_BASE_URL (e.g., https://www.frontdeskagents.com)"
+            exit 1
+          fi
+          echo "Using BASE_URL=${BASE_URL}"
+
+      - name: Make verify script executable
+        run: chmod +x ./verify_enhanced.sh
+
+      - name: Run 14-point certification
+        run: ./verify_enhanced.sh "${BASE_URL}"
