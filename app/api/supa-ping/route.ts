@@ -12,6 +12,6 @@ export async function GET() {
 
     return NextResponse.json({ ok: ok, error: error?.message ?? null });
   } catch (e) {
-    return NextResponse.json({ ok: false, error: e.message }, { status: 500 });
+    return NextResponse.json({ ok: false, error: e instanceof Error ? e.message : String(e) }, { status: 500 });
   }
 }
